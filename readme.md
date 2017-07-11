@@ -1,2 +1,2 @@
 # Actum Surveys Web App Demo
-This is source code for sample ASP.NET Core 1.1 application. This application is used to collect company feedback for technical talks. 
+This application is used to collect company feedback for technical talks. It is also technical demo for ASP.NET Core 1.1 and WebPack2.
