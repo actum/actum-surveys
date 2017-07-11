@@ -1,0 +1,103 @@
+﻿//
+// Load core variables and mixins
+// --------------------------------------------------
+
+@import "variables.less";
+@import "mixins.less";
+@import "glyphicons.less";
+
+@content_bg: white;
+
+@btn-bg-city1: #412976;
+@btn-bg-city2: #0e71b8;
+@btn-bg-city3: #2daae1;
+
+@btn-basic-bg: @btn-bg-city3;
+
+.jquery-hidden {
+	display: none;
+}
+
+small {
+	color: #9da2a5;
+	text-transform: uppercase;
+}
+
+h1 {
+    color: white;
+}
+
+#page {
+	background-color: @content_bg;
+	padding-bottom: 40px;
+}
+
+#header {
+	background-color: @navbar-default-bg;
+}
+
+#footer {
+	p, a, a:visited {
+		color: white;
+	}
+
+	a:hover {
+		text-decoration: underline;
+	}
+
+	@margin: 60px;
+	@margin-link: 20px;
+
+	margin-top: @margin;
+	margin-bottom: @margin;
+
+	a {
+		padding-top: @margin-link;
+		padding-bottom: @margin-link;
+	}
+
+	p {
+	}
+}
+
+@banner-height: 235px;
+@error-bg-color: red;
+
+.banner() {
+	height: @banner-height;
+}
+
+// REGULAR BUTTONS
+.btn-basic {
+	.button-variant(@btn-default-color; @btn-basic-bg; @btn-default-border);
+}
+
+.label-error {
+    padding: 20px;
+    background-color: @error-bg-color;
+    color: white;
+}
+
+@successBgColor: #41c13f;
+
+input.error, select.error {
+    color: @error-bg-color;
+    background-color: lighten(@error-bg-color, 45%);
+    border-color: @error-bg-color;
+}
+
+label.error {
+    padding: 8px;
+    margin: 8px;
+    color: white;
+    background-color: @error-bg-color;
+    display: inline-block;
+}
+
+.validation-summary-errors {
+	color: @alert-danger-text;
+
+	li {
+		list-style-type: none;
+	}
+}

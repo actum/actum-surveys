@@ -1,0 +1,105 @@
+﻿@model SurveyIndexViewModel
+
+@using (Html.BeginForm())
+{
+    <div class="container">
+        <h2>@Model.Survey.Name</h2>
+        @if (Model.Survey.IsClosed)
+        {
+            <p class="lead">This survey has been already closed.</p>
+        }
+        else
+        {
+            foreach (var sec in Model.Sections)
+            {
+                <h3>@sec.SectionHeader</h3>
+                foreach (var q in sec.Questions)
+                {
+                    if (q.Type == Surveys.DA.SurveyQuestionType.SessionRating)
+                    {
+                        <div class="row" data-survey-question="true">
+                            @Html.HiddenFor(m => m.Answers[q.Id.ToString()].IntValue, new { @class = "survey-value" })
+                            <div class="form-group">
+                                <div class="btn-group">
+                                    <a class="btn btn-default" data-survey-btn="0"><span style="color: gray">Don't know</span></a>
+                                    <a class="btn btn-default" data-survey-btn="1"><span style="color: red" class="glyphicon glyphicon-thumbs-down"></span></a>
+                                    <a class="btn btn-default" data-survey-btn="2"><span style="color: green" class="glyphicon glyphicon-thumbs-up"></span></a>
+                                </div>
+                                <a class="btn btn-default survey-text-toggle" style="color: gray"><span class="glyphicon glyphicon-comment"></span></a>
+                                <label>@q.Text</label>
+                                @Html.TextBoxFor(m => m.Answers[q.Id.ToString()].TextValue, new { @class = "form-control survey-text", placeholder = "Your comment", style = Model.Answers[q.Id.ToString()].TextValue == null ? "display: none" : "" })
+                                @Html.ValidationMessageFor(m => m.Answers[q.Id.ToString()].TextValue)
+                            </div>
+                        </div>
+                    }
+                    else if (q.Type == Surveys.DA.SurveyQuestionType.FreeRating)
+                    {
+                        <div class="row" data-survey-question="true">
+                            @Html.HiddenFor(m => m.Answers[q.Id.ToString()].IntValue, new { @class = "survey-value" })
+                            <div class="form-group">
+                                <div class="btn-group">
+                                    <a class="btn btn-default" data-survey-btn="0"><span style="color: gray">Don't know</span></a>
+                                    <a class="btn btn-default" data-survey-btn="1"><span style="color: red" class="glyphicon glyphicon-thumbs-down"></span></a>
+                                    <a class="btn btn-default" data-survey-btn="2"><span style="color: green" class="glyphicon glyphicon-thumbs-up"></span></a>
+                                </div>
+                                <label>@q.Text</label>
+                            </div>
+                        </div>
+                    }
+                    else if (q.Type == Surveys.DA.SurveyQuestionType.FreeText)
+                    {
+                        <div class="row" data-survey-question="true">
+                            @Html.HiddenFor(m => m.Answers[q.Id.ToString()].IntValue, new { @class = "survey-value" })
+                            <div class="form-group">
+                                <label>@q.Text</label>
+                                @Html.TextBoxFor(m => m.Answers[q.Id.ToString()].TextValue, new { @class = "form-control survey-text", placeholder = "Your comment" })
+                                @Html.ValidationMessageFor(m => m.Answers[q.Id.ToString()].TextValue)
+                            </div>
+                        </div>
+                    }
+                }
+            }
+            <div>
+                <input type="submit" value="Submit" class="btn btn-lg center-block btn-success" />
+            </div>
+        }
+    </div>
+}
+<script>
+    function SurveyQuestionsUpdateAll() {
+        $("[data-survey-question]").each(function () {
+            SurveyQuestionUpdate($(this))
+        });
+    }
+
+    function SurveyQuestionSetValue(questionElement, value) {
+        questionElement.find("input.survey-value").val(value);
+        SurveyQuestionUpdate(questionElement);
+    }
+
+    function SurveyQuestionUpdate(questionElement) {
+        var value = questionElement.find("input.survey-value").val();
+        var qv_1 = questionElement.find("a[data-survey-btn=1]");
+        var qv_2 = questionElement.find("a[data-survey-btn=2]");
+
+        var qv_1_sel = (value == "1");
+        var qv_2_sel = (value == "2");
+
+        qv_1.toggleClass("btn-danger", qv_1_sel).toggleClass("btn-default", !qv_1_sel);
+        qv_2.toggleClass("btn-success", qv_2_sel).toggleClass("btn-default", !qv_2_sel);
+    }
+
+    $(function () {
+        $("a[data-survey-btn]").click(function () {
+            var value = $(this).data("survey-btn");
+            var question = $(this).parents("[data-survey-question]");
+            SurveyQuestionSetValue(question, value);
+        });
+        $("a.survey-text-toggle").click(function () {
+            var element = $(this).siblings(".survey-text");
+            element.toggle();
+            element.focus();
+        });
+        SurveyQuestionsUpdateAll();
+    });
+</script>
